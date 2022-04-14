@@ -2,10 +2,7 @@
  
 Backend server and Frontend client for wireless Refind Storage.
 
-Required mods:
-ComputerCraft
-Advanced Peripherals
-Refind Storage
+Required mods: ComputerCraft, Advanced Peripherals, Refind Storage
 
 RSserver.lua - Server file (rename to startup for autostart)
 
