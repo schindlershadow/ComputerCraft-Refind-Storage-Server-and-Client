@@ -119,7 +119,7 @@ local function dump(o)
 end
 
 local function drawNBTmenu(sel)
-    local amount = 1
+    local count = 1
     local done = false
     while done == false do
         term.setBackgroundColor(colors.green)
@@ -132,7 +132,7 @@ local function drawNBTmenu(sel)
         term.setCursorPos(1,1)
         centerText("NBT Menu")
         term.setCursorPos(1, 2)
-        centerText(items[sel].name .. " #" .. tostring(items[sel].amount))
+        centerText(items[sel].name .. " #" .. tostring(items[sel].count))
         term.setCursorPos(1, 3)
         if items[sel].nbt ~= nil then
             write(dump(items[sel].nbt))
@@ -154,7 +154,7 @@ local function drawNBTmenu(sel)
 end
 
 local function drawMenu(sel)
-    local amount = 1
+    local count = 1
     done = false
     while done == false do
         term.setBackgroundColor(colors.green)
@@ -167,7 +167,7 @@ local function drawMenu(sel)
         term.setCursorPos(1,1)
         centerText("Menu")
         term.setCursorPos(1, 2)
-        centerText(items[sel].name .. " #" .. tostring(items[sel].amount))
+        centerText(items[sel].name .. " #" .. tostring(items[sel].count))
         term.setCursorPos(1, 3)
         if items[sel].nbt ~= nil then
             term.setBackgroundColor(colors.red)
@@ -175,7 +175,7 @@ local function drawMenu(sel)
             term.setBackgroundColor(colors.green)
         end
         term.setCursorPos(1, (height * .25) + 4)
-        centerText("Amount to request")
+        centerText("count to request")
         term.setCursorPos(width, 1)
         term.setBackgroundColor(colors.red)
         term.write("x")
@@ -183,7 +183,7 @@ local function drawMenu(sel)
         term.setCursorPos((width * .25), (height * .25) + 5)
         term.write("<")
         term.setCursorPos((width * .50), (height * .25) + 5)
-        centerText(tostring(amount))
+        centerText(tostring(count))
         term.setCursorPos(width - (width * .25), (height * .25) + 5)
         term.write(">")
         term.setCursorPos((width * .25), (height * .25) + 7)
@@ -222,46 +222,46 @@ local function drawMenu(sel)
             (((x < (width * .25) + 2) and (x > (width * .25) - 2)) and
                 ((y > (height * .25) + 4) and (y < (height * .25) + 6)))
          then
-            if amount > 1 then
-                amount = amount - 1
+            if count > 1 then
+                count = count - 1
             end
         elseif
             (((x < (width - (width * .25)) + 2) and (x > (width - (width * .25)) - 2)) and
                 ((y > (height * .25) + 4) and (y < (height * .25) + 6)))
          then
-            if amount < items[sel].amount then
-                amount = amount + 1
+            if count < items[sel].count then
+                count = count + 1
             end
         elseif
             (((x < (width * .25) + 2) and (x > (width * .25) - 2)) and
                 ((y > (height * .25) + 6) and (y < (height * .25) + 10)))
          then
-            if amount + 64 < items[sel].amount then
-                amount = amount + 64
+            if count + 64 < items[sel].count then
+                count = count + 64
             else
-                amount = items[sel].amount
+                count = items[sel].count
             end
         elseif
             (((x < ((width * .25) * 2) + 3) and (x > ((width * .25) * 2) - 3)) and
                 ((y > (height * .25) + 6) and (y < (height * .25) + 10)))
          then
-            if amount > 1+64 then
-                amount = amount - 64
+            if count > 1+64 then
+                count = count - 64
             else
-                amount = 1
+                count = 1
             end
         elseif
             (((x < ((width * .25) * 3) + 3) and (x > ((width * .25) * 3) - 3)) and
                 ((y > (height * .25) + 6) and (y < (height * .25) + 10)))
          then
-             amount = 1
+             count = 1
         elseif y == (height - 1) then
             done = true
             local result
             if items[sel].nbt == nil then
-                result = Item:new(items[sel].name, amount, "", items[sel].tags)
+                result = Item:new(items[sel].name, count, "", items[sel].tags)
             else
-                result = Item:new(items[sel].name, amount, items[sel].fingerprint, items[sel].tags)
+                result = Item:new(items[sel].name, count, items[sel].fingerprint, items[sel].tags)
             end
             export(result)
         elseif y < 2 and x > width - 1 then
@@ -280,7 +280,7 @@ local function drawList()
         table.sort(
             items,
             function(a, b)
-                return a.amount > b.amount
+                return a.count > b.count
             end
         )
         term.setBackgroundColor(colors.blue)
@@ -295,11 +295,11 @@ local function drawList()
                 local text = ""
 
                 if v["nbt"] ~= nil then
-                    text = v["displayName"] .. " #" .. v["amount"] .. " " .. dump(v["nbt"])
+                    text = v["displayName"] .. " #" .. v["count"] .. " " .. dump(v["nbt"])
                 elseif v["tags"] ~= nil then
-                    text = v["displayName"] .. " #" .. v["amount"] .. " " .. v["tags"][1]
+                    text = v["displayName"] .. " #" .. v["count"] .. " " .. v["tags"][1]
                 else
-                    text = v["displayName"] .. " #" .. v["amount"]
+                    text = v["displayName"] .. " #" .. v["count"]
                 end
 
                 term.setCursorPos(1, k)

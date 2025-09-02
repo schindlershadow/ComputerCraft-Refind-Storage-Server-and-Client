@@ -1,14 +1,19 @@
+math.randomseed(os.time() + (7 * os.getComputerID()))
+local cryptoNetURL = "https://raw.githubusercontent.com/SiliconSloth/CryptoNet/master/cryptoNet.lua"
+
+
 local modem = peripheral.find("modem", rednet.open)
-local bridge = peripheral.find("rsBridge") -- Finds the peripheral if one is connected
+local bridge = peripheral.find("rs_bridge") -- Finds the peripheral if one is connected
 local monitor = peripheral.find("monitor")
-local enderChestSide = "left" -- Side the ender chest (or output chest) is on
+local enderChestSide = "top" -- Side the ender chest (or output chest) is on
 local clients = {}
 
 -- bridge.exportItemToPeripheral({name="minecraft:cobblestone", count=1}, "top")
 -- bridge.importItemFromPeripheral({name="minecraft:cobblestone", count=1}, "top")
 
+if bridge == nil then bridge = peripheral.wrap("right") end
 
-if bridge == nil then error("rsBridge not found") end
+if bridge == nil then error("rs_bridge not found") end
 
 local function sendToClients(text)
     for i in pairs(clients) do
@@ -25,8 +30,8 @@ end
 
 local function draw()
 while true do
-    local items = bridge.listItems()
-    table.sort(items, function(a,b) return a.amount > b.amount end)
+    local items = bridge.getItems()
+    table.sort(items, function(a,b) return a.count > b.count end)
 
     monitor.clear()
     monitor.setCursorPos(1, 1)
@@ -35,7 +40,7 @@ while true do
 
     for k,v in pairs(items) do
         monitor.setCursorPos(1, k)
-        local text = v["displayName"] .. " #" .. v["amount"]
+        local text = v["displayName"] .. " #" .. v["count"]
         centerText(text)
     end
 
@@ -66,12 +71,12 @@ local function server()
             end
             print("")
         elseif message == "getItems" then
-            print(bridge.listItems())
-            rednet.send(id, bridge.listItems())
+            print(bridge.getItems())
+            rednet.send(id, bridge.getItems())
         elseif message == "getItem" then
             local id2, message2 = rednet.receive()
             print(bridge.listItem(message2))
-            rednet.send(id, bridge.listItem(message2))
+            rednet.send(id, bridge.getItem(message2))
         elseif message == "import" then
             local id2, message2
             repeat
