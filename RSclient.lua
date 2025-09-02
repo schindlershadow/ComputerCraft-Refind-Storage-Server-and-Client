@@ -296,7 +296,7 @@ local function drawList()
 
                 if v["nbt"] ~= nil then
                     text = v["displayName"] .. " #" .. v["count"] .. " " .. dump(v["nbt"])
-                elseif v["tags"] ~= nil then
+                elseif v["tags"] ~= nil and v["tags"][1] ~= nil then
                     text = v["displayName"] .. " #" .. v["count"] .. " " .. v["tags"][1]
                 else
                     text = v["displayName"] .. " #" .. v["count"]
